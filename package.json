@@ -1,0 +1,28 @@
+{
+  "name": "first-http-server",
+  "version": "0.0.1",
+  "description": "This is my first http server, api and backend code for my frontend project",
+  "keywords": [
+    "node",
+    "express",
+    "drizzle",
+    "progresql",
+    "http"
+  ],
+  "license": "ISC",
+  "author": "Sundeeep Dasari",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "build": "npm install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
