@@ -2,15 +2,17 @@ import express from "express";
 import dotenv from "dotenv";
 import coursesRouter from "./routers/coursesRouter.js";
 import lessonsRouter from "./routers/lessonsRouter.js";
+import authRouter from "./routers/authRouter.js";
 dotenv.config();
+import cookieParser from "cookie-parser";
 
 //constant variables
 const PORT = process.env.PORT;
-
 const app = express();
 
 // middlewares
-app.use(express.json())
+app.use(express.json()) // to accept the body from the every request
+app.use(cookieParser()) // to accept the cookies from the every request
 
 app.get("/health", (request, response, next) => {
     response.status(200).json({
@@ -21,6 +23,7 @@ app.get("/health", (request, response, next) => {
 })
 
 // add all the routers to the middleware (app.use())
+app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/courses", coursesRouter)
 app.use("/api/v1/lessons", lessonsRouter)
 
