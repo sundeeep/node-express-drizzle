@@ -10,9 +10,11 @@ import cookieParser from "cookie-parser";
 const PORT = process.env.PORT;
 const app = express();
 
+console.log("Inside index.js");
+
 // middlewares
-app.use(express.json()) // to accept the body from the every request
 app.use(cookieParser()) // to accept the cookies from the every request
+app.use(express.json()) // to accept the body from the every request
 
 app.get("/health", (request, response, next) => {
     response.status(200).json({
@@ -23,6 +25,7 @@ app.get("/health", (request, response, next) => {
 })
 
 // add all the routers to the middleware (app.use())
+// console.log(typeof authRouter) // function with properties - handler
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/courses", coursesRouter)
 app.use("/api/v1/lessons", lessonsRouter)

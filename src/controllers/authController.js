@@ -2,46 +2,70 @@ import Users from "../db/Users.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwt-tokens.js";
 import jwt from "jsonwebtoken";
 
-const usersInstance = new Users();
+const usersInstance = new Users(); // instantiation of class "User": calling the constructor function
 
-const registerNewUser = (request, response) => {
+const registerNewUser = async (request, response) => {
     try{
         const newUserData = request.body;
-        // save the new user data in database. (users table)
-        const savedUser = usersInstance.createNewUser(newUserData);
+
+        // Validate required fields
+        if (!newUserData.name || !newUserData.email) {
+            throw new Error("Name and email are required!");
+        }
+
+        // Check if user already exists
+        const existingUser = await usersInstance.getUserByEmail(newUserData.email);
+        if(existingUser){
+            throw new Error("User with this email already exists!");
+        }
+
+        // Save the new user data in database
+        const savedUser = await usersInstance.createNewUser(newUserData);
+        if(!savedUser){
+            throw new Error("User not saved in db! Try again.")
+        }
+
         response.status(201).json({
-            success:true,
+            success: true,
             data: savedUser,
             message: "New user has been saved successfully!"
         });
     }catch(error){
+        console.error("Register error:", error);
         response.status(400).json({
             success: false,
-            error: error,
-            message: error.message
+            error: error?.message,
+            message: error?.message
         })
     }
 }
 
-const logInUser = (request, response) => {
+const logInUser = async (request, response) => {
     try{
         const userToLogIn = request.body;
-        // get the existing user via user email while logging in
-        const existingUserData = usersInstance.getUserByEmail(userToLogIn.email)
+
+        // Validate required fields
+        if (!userToLogIn.email) {
+            throw new Error("Email is required!");
+        }
+
+        // Get the existing user via user email while logging in
+        const existingUserData = await usersInstance.getUserByEmail(userToLogIn.email)
 
         if(!existingUserData){
             throw new Error("Email is wrong or User not found!")
         }
 
-        // to save the user data inside the gibberish token string - for authentication and authorization purposes
+        // Generate tokens for authentication and authorization
         const accessToken = generateAccessToken(existingUserData.id);
         const refreshToken = generateRefreshToken(existingUserData.id);
 
-        // save the refreshToken key value in user object
+        // TODO: Save the refreshToken in user record in database
+        // await usersInstance.saveTheRefreshToken(existingUserData.id, refreshToken);
 
         const isProduction = process.env.NODE_ENVIRONMENT === "production" ? true : false;
 
-        // set the cookie : refreshToken
+        // Set the cookie with refreshToken
         response.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: isProduction ? true : false,
@@ -58,8 +82,8 @@ const logInUser = (request, response) => {
     }catch(error){
         response.status(400).json({
             success: false,
-            error: error,
-            message: error.message
+            error: error?.message,
+            message: error?.message
         })
     }
 }

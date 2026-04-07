@@ -1,0 +1,201 @@
+### Test Registration Flow
+### Use this file with VSCode REST Client extension
+### Install: VS Code → Extensions → REST Client
+
+### ============================================
+### 1. HEALTH CHECK
+### ============================================
+
+### Check if server is running
+GET http://localhost:8000/health
+
+
+### ============================================
+### 2. USER REGISTRATION TESTS
+### ============================================
+
+### Test 1: Register first user (should succeed)
+### Expected: 201 Created
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 28
+}
+
+
+### Test 2: Register second user with different email (should succeed)
+### Expected: 201 Created
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Alice Smith",
+  "email": "alice@example.com",
+  "age": 25
+}
+
+
+### Test 3: Register third user
+### Expected: 201 Created
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Bob Johnson",
+  "email": "bob@example.com",
+  "age": 30
+}
+
+
+### Test 4: Try to register with duplicate email (should fail)
+### Expected: 400 Bad Request
+### Error: "User with this email already exists!"
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Different Name",
+  "email": "john@example.com",
+  "age": 35
+}
+
+
+### Test 5: Register without email (should fail)
+### Expected: 400 Bad Request
+### Error: "Name and email are required!"
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Charlie Brown",
+  "age": 40
+}
+
+
+### Test 6: Register without name (should fail)
+### Expected: 400 Bad Request
+### Error: "Name and email are required!"
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "email": "charlie@example.com",
+  "age": 40
+}
+
+
+### Test 7: Register with empty JSON (should fail)
+### Expected: 400 Bad Request
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+}
+
+
+### Test 8: Register with only age (should fail)
+### Expected: 400 Bad Request
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "age": 50
+}
+
+
+### Test 9: Register with additional fields (should work, ignores extra)
+### Expected: 201 Created
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Diana Prince",
+  "email": "diana@example.com",
+  "age": 29,
+  "phone": "123-456-7890",
+  "address": "Gotham City"
+}
+
+
+### Test 10: Register without age (should work, age is optional)
+### Expected: 201 Created
+POST http://localhost:8000/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "Eve Wilson",
+  "email": "eve@example.com"
+}
+
+
+### ============================================
+### 3. LOGIN TESTS
+### ============================================
+
+### Test 11: Login with registered user
+### Expected: 200 OK
+POST http://localhost:8000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com"
+}
+
+
+### Test 12: Login with non-existent user
+### Expected: 400 Bad Request
+POST http://localhost:8000/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "nonexistent@example.com"
+}
+
+
+### ============================================
+### INSTRUCTIONS
+### ============================================
+
+### How to use this file:
+### 1. Install "REST Client" extension in VSCode
+### 2. Open this file (test-registration.rest)
+### 3. Click "Send Request" above any test
+### 4. See response in new panel
+
+### Expected Responses:
+###
+### ✅ 201 Created - User registered successfully
+###    Response includes: id, name, email, age, createdAt
+###
+### ❌ 400 Bad Request - Error occurred
+###    Response includes: error message explaining what went wrong
+###
+### ✅ 200 OK - Login successful
+###    Response includes: user data and access token
+###
+### How to verify data:
+### 1. Run: npm run drizzle:studio
+### 2. Open: http://localhost:5555
+### 3. Select "users" table from left sidebar
+### 4. See all registered users with their data
+
+### Troubleshooting:
+###
+### If "Cannot POST /api/v1/auth/register":
+###   - Make sure server is running: npm run dev
+###   - Check port is 8000 in .env (PORT=8000)
+###
+### If "Database connection refused":
+###   - Check .env DATABASE_URL is correct
+###   - Ensure migrations were applied: npm run drizzle:push
+###
+### If "User with this email already exists!":
+###   - Use different email for new users
+###   - Check Drizzle Studio to see existing users
+###
+### If "Name and email are required!":
+###   - Make sure both "name" and "email" fields exist
+###   - Both fields must have non-empty values
