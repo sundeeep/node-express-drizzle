@@ -11,7 +11,7 @@ dotenv.config();
  * Connects to Neon database using CONNECTION_STRING from .env
  */
 const client = new Client({
-  connectionString: process.env.DATABASE_URL || 'postgresql://neondb_owner:npg_atMGxAlYC61y@ep-dry-star-a1g1acfh-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+  connectionString: process.env.DATABASE_URL,
   // SSL is required by Neon
   ssl: {
     rejectUnauthorized: false,
