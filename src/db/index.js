@@ -1,8 +1,9 @@
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Client } from 'pg';
 import * as schema from './schema.js';
-import dotenv from 'dotenv';
 
+// TODO: Teach the boundary of dotenv
+import dotenv from 'dotenv';
 // Load environment variables
 dotenv.config();
 
@@ -21,6 +22,7 @@ const client = new Client({
 /**
  * Connect to the database
  */
+console.log("Inside /src/db/index.js")
 try {
   await client.connect();
   console.log('✅ Connected to Neon PostgreSQL database');

@@ -1,9 +1,10 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
+
 import coursesRouter from "./routers/coursesRouter.js";
 import lessonsRouter from "./routers/lessonsRouter.js";
 import authRouter from "./routers/authRouter.js";
-dotenv.config();
 import cookieParser from "cookie-parser";
 
 //constant variables

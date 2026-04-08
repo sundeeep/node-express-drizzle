@@ -9,6 +9,8 @@ import {
 } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 
+console.log("Inside schema.js"); //TODO: debug this...
+
 /**
  * USERS TABLE
  * Stores user information
