@@ -33,7 +33,7 @@ try {
  * Create Drizzle ORM instance
  * This is what we use for all database operations
  */
-export const db = drizzle(client, { schema });
+export const db = drizzle(client, { schema }); // TODO: teach later
 
 // Optional: Handle graceful shutdown
 process.on('SIGINT', async () => {

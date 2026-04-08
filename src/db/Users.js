@@ -20,7 +20,7 @@ class Users {
                 .values({
                     name: newUserData.name,
                     email: newUserData.email,
-                    age: newUserData.age || null,
+                    age: newUserData?.age || null,
                 })
                 .returning();
 
