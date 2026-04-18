@@ -7,7 +7,7 @@ import lessonsRouter from "./routers/lessonsRouter.js";
 import authRouter from "./routers/authRouter.js";
 import cookieParser from "cookie-parser";
 
-//constant variables
+// constant variables
 const PORT = process.env.PORT;
 const app = express();
 
@@ -26,7 +26,6 @@ app.get("/health", (request, response, next) => {
 })
 
 // add all the routers to the middleware (app.use())
-// console.log(typeof authRouter) // function with properties - handler
 app.use("/api/v1/auth", authRouter)
 app.use("/api/v1/courses", coursesRouter)
 app.use("/api/v1/lessons", lessonsRouter)
@@ -34,3 +33,5 @@ app.use("/api/v1/lessons", lessonsRouter)
 app.listen(PORT, () => {
     console.log("HTTP Server has been started! at port: ", PORT);
 })
+
+
