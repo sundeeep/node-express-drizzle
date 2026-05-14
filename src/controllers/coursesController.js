@@ -1,6 +1,20 @@
 import Courses from "../db/Courses.js"
+import { asyncHandler } from "../utils/asyncHandler.js"; 
 
 const coursesInstance = new Courses();
+
+const createNewCourse = asyncHandler(async(req, res) => {
+    console.log(req.body);
+    if(!req.body.courseName){
+        throw new Error("courseName is required!")
+    }
+    // call the service function
+    res.status(201).json({
+        success: true,
+        message: "new course is created",
+        data: req.body
+    })
+})
 
 const createCourse = (request, response) => {
     try {
@@ -43,7 +57,6 @@ const createCourse = (request, response) => {
         })
     }
 }
-
 const getAllCourses = (request, response) => {
     response.status(200).json({
         success: true,
@@ -51,7 +64,6 @@ const getAllCourses = (request, response) => {
         messages: "Courses have been fetched, successfully!"
     })
 }
-
 const getCourseById = (request, response) => {
     try {
         const courseId = request.params.courseId
@@ -76,5 +88,6 @@ const getCourseById = (request, response) => {
 export {
     getAllCourses,
     createCourse,
-    getCourseById
+    getCourseById,
+    createNewCourse
 }
