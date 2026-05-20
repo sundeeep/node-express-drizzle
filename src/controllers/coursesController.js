@@ -1,4 +1,5 @@
 import Courses from "../db/Courses.js"
+import { AppError } from "../middlewares/globalErrorHandler.js";
 import { asyncHandler } from "../utils/asyncHandler.js"; 
 
 const coursesInstance = new Courses();
@@ -6,7 +7,7 @@ const coursesInstance = new Courses();
 const createNewCourse = asyncHandler(async(req, res) => {
     console.log(req.body);
     if(!req.body.courseName){
-        throw new Error("courseName is required!")
+        throw new AppError("courseName is required!", 400) // next(error)
     }
     // call the service function
     res.status(201).json({
